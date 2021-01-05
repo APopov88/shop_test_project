@@ -1,0 +1,20 @@
+### Manual
+
+the Merch class controls the merchandise in store, all saved in `merchandise[]` as a list of dictionaries.
+
+use `add_new_product()` method to initialize input functions that will ask for product name, count of how many brought to store, who's the manufacturer (could be brand or anything really) and what's the product price. Please note that the "count" is supposed to be a float or integer number larger than 0, while price is another integer of float equal or greater than 0. Exceptions will be raised if entered data doesn't meet the requirements. `add_new_product()` method will call the `create_new_merch()` method and pass the input information to create a new entry in the merchandise list. If product with the given name from the same manufacturer already exists, the function will add the count of new product to existing count as well as update the price.
+
+`search(x)` method will look through the names of available products in inventory and give a list of products that contain __x__  in their names. Note __x__ doesn't have to match name exactly. Use this function if you need to find the exact names of products that you need to work with.
+
+
+`inventory()` function will look through the merchandise and print a list of products which count is more than 0, i.e. are available in store. 
+
+`supply_inventory("name", "manufacturer", count)` function is to be used when inventory of existing products is restocked. Note that count needs to be a number or the __+__ operator will give an error. Use `search()` function to find exact name and manufacturer for restocked product.
+
+`price_update("name", "manufacturer", price)` will update the price for products. 
+
+`inventory_sale("name", "manufacturer", count)` is to be used when deducting products from inventory during sale. Note you cannot sell more items than currently in stock.
+
+
+
+
