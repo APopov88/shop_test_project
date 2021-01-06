@@ -1,55 +1,116 @@
-merchandise = {}
+class ProductCountERROR(Exception):
+    """Error raised if entered product count is not a number larger than 0"""
+    def __init__(self, count, message="Count should be a number larger than 0"):
+        self.count = count
+        self.message = message
+        super().__init__(self.message)
 
+
+class PriceERROR(Exception):
+    """Error raised if price entered is less than 0"""
+    def __init__(self, price, message="Price should be a number not smaller than 0"):
+        self.price = price
+        self.message = message
+        super().__init__(self.message)
+
+
+merchandise = []
 
 class Merch:
-  def __init__ (self, name, count):
-    self.name = name
-    self.count = count
-    if name in merchandise.keys():
-      merchandise.update({name: merchandise.get(name)+count})
-    else:
-      merchandise.update({name:count})
-
-  def search(x):
-    merchsearch = {}
-    for key in merchandise.keys():
-      if x in key:
-        merchsearch.update({key: merchandise.get(key)})
-    print(merchsearch)
-
-  def inventory():
-    inventory = {}
-    for (key, value) in merchandise.items():
-      if value > 0:
-        inventory.update({key: value})
-    print(inventory)
-
-  def add_inventory(name, count):
-    if name in merchandise.keys():
-      merchandise.update({name: merchandise.get(name) + count})
-    else:
-      print("Item new to shop, please initialize new inventory item")
-
-  def sale(name, count):
-      if name in merchandise.keys():
-        merchandise.update({name: merchandise.get(name) - count})
-      else:
-        print("Item not in inventory, impossible to sell")
+    def __init__ (self, name, count, manufacturer, price):
+        self.name = name
+        self.count = count
+        self.manufacturer = manufacturer
+        self.price = price
 
 
-cucumber = Merch("Cucumber", 50)
+    def create_new_merch(name, count, manufacturer, price):
+        if not count > 0:
+            raise ProductCountERROR(count)
 
-tomatoe = Merch("Tomatoe", 55)
+        if not price >= 0:
+            raise PriceERROR(price)
 
-cucumber = Merch("Cucumber", 20)
+        exprodindex = None
+        for prod in merchandise:
+            if name == prod.get("name") and manufacturer == prod.get("manufacturer"):
+                exprodindex = merchandise.index(prod)
 
-Onion = Merch("Onion",10)
+        if exprodindex:
+            merchandise[exprodindex].update({
+            "count": merchandise[exprodindex].get("count") + count,
+            "price": price
+            })
+        else:
+            newprod = {"name": name,
+                      "count": count,
+                      "manufacturer": manufacturer,
+                      "price": price
+                      }
+            merchandise.append(newprod)
 
-Merch.add_inventory("Tomatoe", 15)
+    def add_new_product():
+        name = input("Enter product name")
+        count = float(input("Enter product count. A number greater than 0"))
+        manufacturer = input("Enter the name of the company producing the product")
+        price = float(input("Enter product price, a number greater or equal to 0"))
+        Merch.create_new_merch(name, count, manufacturer, price)
 
-Merch.sale("Tomatoe", 2)
+    def search(x):
+        merchsearch = []
+        for prod in merchandise:
+            if x in prod.get("name") or x in prod.get("manufacturer"):
+                merchsearch.append(prod)
+        print(merchsearch)
 
-Merch.inventory()
+    def inventory():
+        inventory = []
+        for prod in merchandise:
+            if prod.get("count") > 0:
+              inventory.append(prod)
+        print(inventory)
 
+    def supply_inventory(name, manufacturer, count):
+        exprodindex = None
+        for prod in merchandise:
+            if name == prod.get("name") and manufacturer == prod.get("manufacturer"):
+                exprodindex = merchandise.index(prod)
 
+        if exprodindex:
+            merchandise[exprodindex].update({
+                "count": merchandise[exprodindex].get("count") + count,
+            })
+        else:
+            print("Item new to shop, please use \"search\" function to find exact name of product "
+                  "or initialize new inventory item with \"add_new_product()\" method")
 
+    def price_update(name, manufacturer, price):
+        exprodindex = None
+        for prod in merchandise:
+            if name == prod.get("name") and manufacturer == prod.get("manufacturer"):
+                exprodindex = merchandise.index(prod)
+
+        if exprodindex:
+            merchandise[exprodindex].update({
+                "price": price,
+            })
+        else:
+            print("Item new to shop, please use \"search\" function to find exact name of product "
+                    "or initialize new inventory item with \"add_new_product()\" method")
+
+    def inventory_sale(name, manufacturer, count):
+        exprodindex = None
+        for prod in merchandise:
+            if name == prod.get("name") and manufacturer == prod.get("manufacturer"):
+                exprodindex = merchandise.index(prod)
+
+        if exprodindex:
+            if merchandise[exprodindex].get("count") >= count:
+                merchandise[exprodindex].update({
+                    "count": merchandise[exprodindex].get("count") - count,
+                })
+            else:
+                print("Not enough items in inventory to sell, current count is: "
+                      + str(merchandise[exprodindex].get("count")))
+        else:
+            print("Item new to shop, please use \"search\" function to find exact name")
