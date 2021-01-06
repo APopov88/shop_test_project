@@ -47,7 +47,7 @@ class Merch:
                       "manufacturer": manufacturer,
                       "price": price
                       }
-            Merch.merchandise.append(newprod)
+            merchandise.append(newprod)
 
     def add_new_product():
         name = input("Enter product name")
@@ -60,7 +60,7 @@ class Merch:
         merchsearch = []
         for prod in merchandise:
             if x in prod.get("name") or x in prod.get("manufacturer"):
-                self.merchsearch.append(prod)
+                merchsearch.append(prod)
         print(merchsearch)
 
     def inventory():
@@ -114,4 +114,3 @@ class Merch:
                       + str(merchandise[exprodindex].get("count")))
         else:
             print("Item new to shop, please use \"search\" function to find exact name")
-
